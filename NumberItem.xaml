@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Name="BackGroundColor"  Background="WhiteSmoke" Margin="3,3,3,3" >    
         <Viewbox Name="Number_ViewBox"  Stretch="Uniform" DataContext="{Binding}" >
-            <TextBlock Text="{Binding Number}" Foreground="Black"  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="Auto"/>
+            <TextBlock Name="txt_Num"  Text="{Binding Number, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black"  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="Auto"/>
         </Viewbox>
     </Grid>
 </UserControl>
