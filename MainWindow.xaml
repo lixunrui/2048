@@ -34,9 +34,9 @@
                 
             </Grid.ColumnDefinitions>
 
-            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
-            <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
-            <Rectangle Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Margin="3,0,20,0" Stroke="LightYellow"  />
+            <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  Margin="3,0,20,0" Stroke="LightYellow"  />
+            <Rectangle Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"  Margin="3,0,20,0" Stroke="LightYellow"  />
             
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Best Score:" FontSize="20" HorizontalAlignment="Right" />
             <TextBlock Name="txt_BestScore" Grid.Row="0" Grid.Column="2"  Grid.ColumnSpan="2" Text="123" FontSize="20" HorizontalAlignment="Left" Margin="20,0,0,0"/>
@@ -46,6 +46,21 @@
 
             <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Move:" FontSize="20" HorizontalAlignment="Right" />
             <TextBlock Name="txt_Moves" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="2" Text="123" FontSize="20" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+
+            <Border BorderBrush="LightSalmon" BorderThickness="3"  Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="70,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"  Grid.Column="0"   Text="Next Achievement:" TextWrapping="Wrap"  
+                       FontWeight="Bold"  FontSize="15" FontStyle="Italic"  HorizontalAlignment="Center" />
+                    <TextBlock Name="txt_NextGoal"  Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Text="8" FontWeight="Bold"  
+                       FontSize="21" FontStyle="Italic"  HorizontalAlignment="Center" />
+
+                </Grid>
+            </Border>
+            
             
             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  Margin="50,15,30,15" Content="New Game" FontSize="15" Click="New_Game_Clicked"/>
             <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"  Margin="30,15,50,15" Content="Exit" FontSize="15" Click="Exit_Clicked"/>
