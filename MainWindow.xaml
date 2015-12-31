@@ -18,7 +18,7 @@
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
         
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -33,6 +33,11 @@
                 <ColumnDefinition />
                 
             </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
+            <Rectangle Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
+            <Rectangle Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"  Margin="3" Stroke="LightYellow"  />
+            
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Best Score:" FontSize="20" HorizontalAlignment="Right" />
             <TextBlock Name="txt_BestScore" Grid.Row="0" Grid.Column="2"  Grid.ColumnSpan="2" Text="123" FontSize="20" HorizontalAlignment="Left" Margin="20,0,0,0"/>
 

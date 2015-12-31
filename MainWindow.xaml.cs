@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
+using System.Windows.Media.Animation;
 
 namespace LXR_2048
 {
@@ -27,6 +28,9 @@ namespace LXR_2048
         const Int32 START_NUMBER = 2;
         const Int32 MAX_NUMBER = 16;
         const Int32 NUMBER_A_LINE = 4;
+
+        Int32 currentScore = 0;
+        Int32 moved = 0;
 
         Boolean _moved = false;
 
@@ -45,38 +49,37 @@ namespace LXR_2048
 
         private void UpdateScore(int elementNumber=0)
         {
+            try
+            {
+                currentScore = Convert.ToInt32(txt_Score.Text);
+            }
+            catch (System.Exception)
+            {
+                txt_Score.Text = "0";
+            }
+
+            try
+            {
+                if (!_moved || (elementNumber > 0 && _moved))
+                {
+                    moved = Convert.ToInt32(txt_Moves.Text);
+                }
+            }
+            catch (System.Exception)
+            {
+                txt_Moves.Text = "0";
+            }
+            _moved = true;
+
+
             this.Dispatcher.BeginInvoke((Action)(() =>
             {
-                try
-                {
-                    Int32 currentScore = Convert.ToInt32(txt_Score.Text);
-                    txt_Score.Text = (currentScore + elementNumber).ToString();
-                }
-                catch (System.Exception)
-                {
-                    txt_Score.Text = "0";
-                }
+                txt_Score.Text = (currentScore + elementNumber).ToString();
+ 
+                txt_Moves.Text = (moved + 1).ToString();
 
-                try
-                {
-                    if (!_moved)
-                    {
-                        Int32 moved = Convert.ToInt32(txt_Moves.Text);
-                        txt_Moves.Text = (moved + 1).ToString();
-                    }
-
-                }
-                catch (System.Exception)
-                {
-                    txt_Moves.Text = "0";
-                }
-
-                _moved = true;
-                
-                ReadyToAdd.Set();
             }));
         }
-
 
 
         // Only create two components when start the game
@@ -193,8 +196,10 @@ namespace LXR_2048
 
             if (!GameOver())
             {
-                if (ReadyToAdd.WaitOne(300))
+                Console.WriteLine("Waiting...");
+                if (_moved)
                 {
+                    Console.WriteLine("Continue...");
                     UpdateComponentsColor();
                     CreateComponents(1);
                 }
@@ -241,7 +246,9 @@ namespace LXR_2048
                         Numbers[row - 1, column] = Numbers[row, column];
 
                         Numbers[row, column] = null;
+                        
                         UpdateScore();
+        
                         row--;
 
                     }
@@ -252,7 +259,9 @@ namespace LXR_2048
                             // add them together and destroy the second element
                             Numbers[row - 1, column].Number += Numbers[row, column].Number;
                             Console.WriteLine("Update {{{0}:{1}}} to {2}", row - 1, column, Numbers[row - 1, column].Number);
+                            
                             UpdateScore(Numbers[row, column].Number);
+                           
                             RemoveElement(Numbers[row, column]);
                             Numbers[row, column] = null;
                             
@@ -287,7 +296,9 @@ namespace LXR_2048
                         Numbers[row + 1, column] = Numbers[row, column];
 
                         Numbers[row, column] = null;
+                        
                         UpdateScore();
+
                         row++;
 
                     }
@@ -298,7 +309,9 @@ namespace LXR_2048
                             // add them together and destroy the second element
                             Numbers[row + 1, column].Number += Numbers[row, column].Number;
                             Console.WriteLine("Update {{{0}:{1}}} to {2}", row + 1, column, Numbers[row + 1, column].Number);
+                            
                             UpdateScore(Numbers[row, column].Number);
+                           
                             RemoveElement(Numbers[row, column]);
                             Numbers[row, column] = null;
                             
@@ -333,7 +346,9 @@ namespace LXR_2048
                         Numbers[row, column - 1] = Numbers[row, column];
                                             
                         Numbers[row, column] = null;
+                        
                         UpdateScore();
+                      
                         column--;
                         
                     }
@@ -344,7 +359,9 @@ namespace LXR_2048
                             // add them together and destroy the second element
                             Numbers[row, column - 1].Number += Numbers[row, column].Number;
                             Console.WriteLine("Update {{{0}:{1}}} to {2}", row, column - 1, Numbers[row, column - 1].Number);
+                            
                             UpdateScore(Numbers[row, column].Number);
+                          
                             RemoveElement(Numbers[row, column]);
                             Numbers[row, column] = null;
                          
@@ -374,12 +391,14 @@ namespace LXR_2048
                     }
                     else if (Numbers[row, column + 1] == null)
                     {
-                        // move current to the left 
+                        // move current to the right 
                         UpdatePosition(Numbers[row, column], row, column + 1);
                         Numbers[row, column + 1] = Numbers[row, column];
-
+                        
                         Numbers[row, column] = null;
+                        
                         UpdateScore();
+                        
                         column++;
 
                     }
@@ -390,7 +409,9 @@ namespace LXR_2048
                             // add them together and destroy the second element
                             Numbers[row, column + 1].Number += Numbers[row, column].Number;
                             Console.WriteLine("Update {{{0}:{1}}} to {2}", row, column + 1, Numbers[row, column + 1].Number);
+                            
                             UpdateScore(Numbers[row, column].Number);
+                           
                             RemoveElement(Numbers[row, column]);
                             Numbers[row, column] = null;
               
@@ -402,16 +423,11 @@ namespace LXR_2048
             }// end for row
         }
 
-        void NestMove(ref int row, ref int column)
-        {
-
-            
-        }
-
         void UpdatePosition(NumberItem item, int row, int column)
         {
             this.Dispatcher.BeginInvoke((Action)(
                 ()=>{
+                    MoveElementTo(item, row, column);
                     Grid.SetColumn(item, column);
                     Grid.SetRow(item, row);
                     item.Position = new NumberItem.Coordicate(row, column);
@@ -429,11 +445,12 @@ namespace LXR_2048
     ));
         }
 
-
-
         private void Exit_Clicked(object sender, RoutedEventArgs e)
         {
             this.Close();
+            //About a = new About();
+            //a.Owner = this;
+            //a.ShowDialog();
         }
 
         private void New_Game_Clicked(object sender, RoutedEventArgs e)
@@ -453,7 +470,15 @@ namespace LXR_2048
                 NumberPanel.Children.Remove(element);
             }
             InitNumberComponents();
-            
+        }
+
+        void MoveElementTo(UIElement element,int toRow, int toColumn )
+        {
+            Int32Animation rowAnimation = new Int32Animation(toRow, (Duration)TimeSpan.FromSeconds(0.03));
+            Int32Animation columnAnimation = new Int32Animation(toColumn, (Duration)TimeSpan.FromSeconds(0.03));
+           
+            element.BeginAnimation(Grid.ColumnProperty, columnAnimation);
+            element.BeginAnimation(Grid.RowProperty, rowAnimation);
         }
     }
 }
